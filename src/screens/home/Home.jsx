@@ -215,7 +215,7 @@ const Dashboard = () => {
               <View>
                 <Text style={styles.balanceText}>Balance</Text>
                 <Text style={styles.amount}>
-                  {` Rs : ${
+                  {` Rs : ₹ ${
                     walletData?.balance.toFixed(2)
                       ? walletData?.balance.toFixed(2)
                       : '0'
@@ -393,10 +393,10 @@ const Dashboard = () => {
                 </Text>
                 <Text style={{color: '#fff'}}>Code : {itemStore.symbol}</Text>
                 <Text style={{color: '#fff'}}>
-                  Price : {itemStore.current_price}
+                  Price(INR) : ₹ {itemStore.current_price_inr.toFixed(2)}
                 </Text>
                 <Text style={{color: '#fff'}}>
-                  Total Price : {itemStore.current_price * counter.toFixed(2)}
+                  Total Price : ₹ {itemStore.current_price_inr.toFixed(2) * counter.toFixed(2)}
                 </Text>
               </View>
               <SpaceBetween

@@ -272,6 +272,9 @@ export default function App() {
   }, [lastInteractionTime, token]);
 
   useEffect(() => {
+    if (!profileData?.user?._id) {
+      return;
+    }
     const fetchNotification = async () => {
       try {
         const res = await apiService({
@@ -288,7 +291,7 @@ export default function App() {
       }
     };
     fetchNotification();
-  }, [token]);
+  }, [profileData?.user?._id, token]);
   return (
     <NavigationContainer>
       <StackNavigation token={token} />

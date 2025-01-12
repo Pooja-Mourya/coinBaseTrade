@@ -1,203 +1,3 @@
-// import React, {useState} from 'react';
-// import {
-//   Text,
-//   Image,
-//   StyleSheet,
-//   TouchableOpacity,
-//   View,
-//   ScrollView,
-//   ToastAndroid,
-//   ActivityIndicator,
-// } from 'react-native';
-// import SpaceBetween from '../common/SpaceBetween';
-// import {Colors} from '../common/AppColors';
-// import CommonButton from '../common/CommonButton';
-// import CommonInput from '../common/CommonInput';
-// import ImagePickerComponent from '../common/ImagePickerComponent';
-// import OTPInput from './OtpInput';
-// import axios from 'axios';
-// import DocumentPickerComponent from '../common/DocumentPickerComponent';
-
-// const SignUp = ({setScreenState}) => {
-//   const [formData, setFormData] = useState({
-//     name: 'pooja',
-//     email: 'puja.mourya575@gmail.com',
-//     password: '123456789',
-//     profession: '',
-//     gender: 'Female',
-//     mobile: 6265229371,
-//     dob: '',
-//     nationality: '',
-//     altMobile: '',
-//     address: '',
-//     city: '',
-//     state: '',
-//     pincode: '',
-//     panNo: '',
-//     aadharNo: '',
-//     accNo: '',
-//     ifsc: '',
-//     branch: '',
-//     profileImg: null,
-//     aadharImg: null,
-//     panImg: null,
-//   });
-//   const [image, setImage] = useState(null);
-//   const [panImg, setPanImg] = useState(null);
-//   const [adharImg, setAdharImg] = useState(null);
-//   const [loader, setLoader] = useState(false);
-//   const [otpModal, setOtpModal] = useState();
-//   const [fileName, setFileName] = useState(null);
-//   const [fileUri, setFileUri] = useState(null);
-//   const handleChange = (name, value) => {
-//     setFormData({...formData, [name]: value});
-//   };
-
-//   const handleSubmit = async () => {
-//     const requiredFields = ['name', 'email', 'password', 'mobile', 'gender'];
-//     for (let field of requiredFields) {
-//       if (!formData[field]) {
-//         ToastAndroid.show(`${field} is required`, ToastAndroid.SHORT);
-//         return;
-//       }
-//     }
-//     const finalData = {...formData};
-//     const appendFileAsObject = (file, key) => {
-//       if (file) {
-//         finalData[key] = JSON.stringify(file);
-//       }
-//     };
-
-//     appendFileAsObject(image, 'profileImg');
-//     appendFileAsObject(panImg, 'panImg');
-//     appendFileAsObject(adharImg, 'aadharImg');
-//     setLoader(true);
-//     try {
-//       const response = await axios.post(
-//         'https://www.coinbt.in/api/v1/auth/register',
-//         finalData,
-//         {
-//           headers: {
-//             'Content-Type': 'multipart/form-data',
-//           },
-//         },
-//       );
-//       setLoader(false);
-//       ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-//       setOtpModal(true);
-//       // console.log('Form Submitted Successfully', response.data);
-//     } catch (error) {
-//       ToastAndroid.show('Error submitting form', ToastAndroid.SHORT);
-//       console.error('Error submitting form', error);
-//     }
-//   };
-
-//   return (
-//     <>
-//       <Image source={require('../assets/img/logo.png')} />
-//       <Text style={styles.title}>Sign Up</Text>
-
-//       <ScrollView
-//         style={{width: '100%', height: '100%', bottomMargin: 0, flex: 1}}>
-//         <ImagePickerComponent
-//           buttonTitle="Profile Image"
-//           imageUri={image}
-//           setImageUri={setImage}
-//         />
-//         <ImagePickerComponent
-//           buttonTitle="Upload Pan"
-//           imageUri={panImg}
-//           setImageUri={setPanImg}
-//         />
-//         <ImagePickerComponent
-//           buttonTitle="Upload Aadhar"
-//           imageUri={adharImg}
-//           setImageUri={setAdharImg}
-//         />
-//         <DocumentPickerComponent
-//           title="Select a File"
-//           buttonTitle="Pick Document"
-//           fileName={fileName}
-//           setFileName={setFileName}
-//           fileUri={fileUri}
-//           setFileUri={setFileUri}
-//         />
-
-//         {Object.keys(formData).map(key => (
-//           <View key={key}>
-//             <CommonInput
-//               value={formData[key]}
-//               onChangeText={value => handleChange(key, value)}
-//               placeholder={key}
-//             />
-//           </View>
-//         ))}
-
-//         <SpaceBetween
-//           children={
-//             <CommonButton
-//               title={
-//                 !loader ? (
-//                   'Continue'
-//                 ) : (
-//                   <ActivityIndicator size={'small'} color={'#ffff'} />
-//                 )
-//               }
-//               backgroundColor={Colors.button}
-//               width={'80%'}
-//               textColor={'#000'}
-//               buttonStyle={{flex: 1, justifyContent: 'center'}}
-//               onPress={handleSubmit}
-//             />
-//           }
-//         />
-//         <Text>{'\n'}</Text>
-
-//         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-//           <Text style={styles.signInText}>Already have an account ? </Text>
-//           <TouchableOpacity onPress={() => setScreenState('signUp')}>
-//             <Text style={styles.signInLink}>Sign In</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </ScrollView>
-//       {otpModal && (
-//         <OTPInput modal={otpModal} closeModal={() => setOtpModal(false)} />
-//       )}
-//     </>
-//   );
-// };
-
-// export default SignUp;
-
-// const styles = StyleSheet.create({
-//   lineStyle: {
-//     width: '30%',
-//     backgroundColor: Colors.textColor,
-//     height: 1,
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     color: '#fff',
-//     textAlign: 'center',
-//     marginVertical: 30,
-//   },
-//   divider: {
-//     color: '#fff',
-//     textAlign: 'center',
-//     marginBottom: 20,
-//     marginTop: -12,
-//   },
-//   signInText: {
-//     color: '#fff',
-//     textAlign: 'center',
-//   },
-//   signInLink: {
-//     color: '#FDCB5A',
-//     fontWeight: 'bold',
-//   },
-// });
-
 import React, {useState} from 'react';
 import {
   Text,
@@ -219,7 +19,6 @@ import OTPInput from './OtpInput';
 import axios from 'axios';
 import DocumentPickerComponent from '../common/DocumentPickerComponent';
 
-
 const {width} = Dimensions.get('window');
 
 const SignUp = ({setScreenState, token}) => {
@@ -234,8 +33,8 @@ const SignUp = ({setScreenState, token}) => {
     nationality: '',
     altMobile: '',
     address: '',
-    city: '',
     state: '',
+    city: '',
     pincode: '',
     panNo: '',
     aadharNo: '',
@@ -254,7 +53,282 @@ const SignUp = ({setScreenState, token}) => {
     setFormData(prevState => ({...prevState, [name]: value}));
   };
 
- 
+  const statesAndDistricts = {
+    'Andhra Pradesh': [
+      'Anantapur',
+      'Chittoor',
+      'East Godavari',
+      'Guntur',
+      'Krishna',
+      'Kurnool',
+      'Nellore',
+      'Prakasam',
+      'Srikakulam',
+      'Visakhapatnam',
+      'Vizianagaram',
+      'West Godavari',
+      'YSR Kadapa',
+    ],
+    'Arunachal Pradesh': [
+      'Tawang',
+      'West Kameng',
+      'East Kameng',
+      'Papum Pare',
+      'Kurung Kumey',
+      'Kra Daadi',
+      'Lower Subansiri',
+      'Upper Subansiri',
+      'West Siang',
+      'East Siang',
+      'Siang',
+      'Upper Siang',
+      'Lower Siang',
+      'Lower Dibang Valley',
+      'Dibang Valley',
+      'Anjaw',
+      'Lohit',
+      'Namsai',
+      'Changlang',
+      'Tirap',
+      'Longding',
+    ],
+    Assam: [
+      'Baksa',
+      'Barpeta',
+      'Biswanath',
+      'Bongaigaon',
+      'Cachar',
+      'Charaideo',
+      'Chirang',
+      'Darrang',
+      'Dhemaji',
+      'Dhubri',
+      'Dibrugarh',
+      'Dima Hasao',
+      'Goalpara',
+      'Golaghat',
+      'Hailakandi',
+      'Hojai',
+      'Jorhat',
+      'Kamrup',
+      'Kamrup Metropolitan',
+      'Karbi Anglong',
+      'Karimganj',
+      'Kokrajhar',
+      'Lakhimpur',
+      'Majuli',
+      'Morigaon',
+      'Nagaon',
+      'Nalbari',
+      'Sivasagar',
+      'Sonitpur',
+      'South Salmara-Mankachar',
+      'Tinsukia',
+      'Udalguri',
+      'West Karbi Anglong',
+    ],
+    Bihar: [
+      'Araria',
+      'Arwal',
+      'Aurangabad',
+      'Banka',
+      'Begusarai',
+      'Bhagalpur',
+      'Bhojpur',
+      'Buxar',
+      'Darbhanga',
+      'East Champaran',
+      'Gaya',
+      'Gopalganj',
+      'Jamui',
+      'Jehanabad',
+      'Kaimur',
+      'Katihar',
+      'Khagaria',
+      'Kishanganj',
+      'Lakhisarai',
+      'Madhepura',
+      'Madhubani',
+      'Munger',
+      'Muzaffarpur',
+      'Nalanda',
+      'Nawada',
+      'Patna',
+      'Purnia',
+      'Rohtas',
+      'Saharsa',
+      'Samastipur',
+      'Saran',
+      'Sheikhpura',
+      'Sheohar',
+      'Sitamarhi',
+      'Siwan',
+      'Supaul',
+      'Vaishali',
+      'West Champaran',
+    ],
+    Chhattisgarh: [
+      'Balod',
+      'Baloda Bazar',
+      'Balrampur',
+      'Bastar',
+      'Bemetara',
+      'Bijapur',
+      'Bilaspur',
+      'Dantewada',
+      'Dhamtari',
+      'Durg',
+      'Gariaband',
+      'Gaurela-Pendra-Marwahi',
+      'Janjgir-Champa',
+      'Jashpur',
+      'Kabirdham',
+      'Kanker',
+      'Kondagaon',
+      'Korba',
+      'Korea',
+      'Mahasamund',
+      'Mungeli',
+      'Narayanpur',
+      'Raigarh',
+      'Raipur',
+      'Rajnandgaon',
+      'Sukma',
+      'Surajpur',
+      'Surguja',
+    ],
+    Goa: ['North Goa', 'South Goa'],
+    Gujarat: [
+      'Ahmedabad',
+      'Amreli',
+      'Anand',
+      'Aravalli',
+      'Banaskantha',
+      'Bharuch',
+      'Bhavnagar',
+      'Botad',
+      'Chhota Udepur',
+      'Dahod',
+      'Dang',
+      'Devbhoomi Dwarka',
+      'Gandhinagar',
+      'Gir Somnath',
+      'Jamnagar',
+      'Junagadh',
+      'Kheda',
+      'Kutch',
+      'Mahisagar',
+      'Mehsana',
+      'Morbi',
+      'Narmada',
+      'Navsari',
+      'Panchmahal',
+      'Patan',
+      'Porbandar',
+      'Rajkot',
+      'Sabarkantha',
+      'Surat',
+      'Surendranagar',
+      'Tapi',
+      'Vadodara',
+      'Valsad',
+    ],
+    Haryana: [
+      'Ambala',
+      'Bhiwani',
+      'Charkhi Dadri',
+      'Faridabad',
+      'Fatehabad',
+      'Gurugram',
+      'Hisar',
+      'Jhajjar',
+      'Jind',
+      'Kaithal',
+      'Karnal',
+      'Kurukshetra',
+      'Mahendragarh',
+      'Nuh',
+      'Palwal',
+      'Panchkula',
+      'Panipat',
+      'Rewari',
+      'Rohtak',
+      'Sirsa',
+      'Sonipat',
+      'Yamunanagar',
+    ],
+    'Himachal Pradesh': [
+      'Bilaspur',
+      'Chamba',
+      'Hamirpur',
+      'Kangra',
+      'Kinnaur',
+      'Kullu',
+      'Lahaul and Spiti',
+      'Mandi',
+      'Shimla',
+      'Sirmaur',
+      'Solan',
+      'Una',
+    ],
+
+    'Andaman and Nicobar Islands': [
+      'Nicobar',
+      'North and Middle Andaman',
+      'South Andaman',
+    ],
+    Chandigarh: ['Chandigarh'],
+    'Dadra and Nagar Haveli and Daman and Diu': ['Daman', 'Diu', 'Silvassa'],
+    Delhi: [
+      'Central Delhi',
+      'East Delhi',
+      'New Delhi',
+      'North Delhi',
+      'North East Delhi',
+      'North West Delhi',
+      'Shahdara',
+      'South Delhi',
+      'South East Delhi',
+      'South West Delhi',
+      'West Delhi',
+    ],
+    Lakshadweep: [
+      'Agatti',
+      'Amini',
+      'Androth',
+      'Bitra',
+      'Chetlat',
+      'Kadmat',
+      'Kalpeni',
+      'Kavaratti',
+      'Kiltan',
+      'Minicoy',
+    ],
+    Puducherry: ['Karaikal', 'Mahe', 'Puducherry', 'Yanam'],
+    'Jammu and Kashmir': [
+      'Anantnag',
+      'Bandipora',
+      'Baramulla',
+      'Budgam',
+      'Doda',
+      'Ganderbal',
+      'Jammu',
+      'Kathua',
+      'Kishtwar',
+      'Kulgam',
+      'Kupwara',
+      'Poonch',
+      'Pulwama',
+      'Rajouri',
+      'Ramban',
+      'Reasi',
+      'Samba',
+      'Shopian',
+      'Srinagar',
+      'Udhampur',
+    ],
+    Ladakh: ['Kargil', 'Leh'],
+  };
 
   const handleSubmit = async () => {
     const requiredFields = ['name', 'email', 'password', 'mobile', 'gender'];
@@ -296,12 +370,10 @@ const SignUp = ({setScreenState, token}) => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: token, // Ensure token is passed
+            Authorization: token,
           },
         },
       );
-      // console.log("res register : ", response);
-      console.log('plainObject : ', plainObject);
       if (response.data.message) {
         ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
         setOtpModal(true);
@@ -406,9 +478,7 @@ const SignUp = ({setScreenState, token}) => {
                     onValueChange={value => handleChange(key, value)}
                     style={{
                       color: '#fff',
-                      backgroundColor: '#333',
-                      borderRadius: 5,
-                      marginVertical: 10,
+                      backgroundColor: '#2C2C85',
                     }}>
                     <Picker.Item label="Select Gender" value="" />
                     <Picker.Item label="Male" value="Male" />
@@ -417,6 +487,51 @@ const SignUp = ({setScreenState, token}) => {
                 </View>
               );
             }
+
+            if (key === 'state') {
+              return (
+                <View key={key} style={{marginVertical: 10}}>
+                  <Picker
+                    selectedValue={formData.state}
+                    onValueChange={value => handleChange(key, value)}
+                    style={{
+                      color: '#fff',
+                      backgroundColor: '#2C2C85',
+                    }}>
+                    <Picker.Item label="Select State" value="" />
+                    {Object.keys(statesAndDistricts).map(state => (
+                      <Picker.Item key={state} label={state} value={state} />
+                    ))}
+                  </Picker>
+                </View>
+              );
+            }
+
+            if (key === 'city') {
+              const districts = statesAndDistricts[formData.state] || [];
+              return (
+                <View key={key} style={{marginVertical: 10}}>
+                  <Picker
+                    selectedValue={formData.city}
+                    onValueChange={value => handleChange(key, value)}
+                    style={{
+                      color: '#fff',
+                      backgroundColor: '#2C2C85',
+                    }}
+                    enabled={districts.length > 0}>
+                    <Picker.Item label="Select City" value="" />
+                    {districts.map(district => (
+                      <Picker.Item
+                        key={district}
+                        label={district}
+                        value={district}
+                      />
+                    ))}
+                  </Picker>
+                </View>
+              );
+            }
+
             return (
               <View key={key}>
                 <CommonInput
@@ -457,7 +572,11 @@ const SignUp = ({setScreenState, token}) => {
       </ScrollView>
 
       {otpModal && (
-        <OTPInput modal={otpModal} closeModal={() => setOtpModal(false)} />
+        <OTPInput
+          visible={otpModal}
+          emailAll={formData.email}
+          onClose={() => setOtpModal(false)}
+        />
       )}
     </>
   );

@@ -20,10 +20,10 @@ import { AllData, IsAdmin, UserData } from '../redux/AuthSlice';
 const SignIn = ({setScreenState}) => {
   const navigation = useNavigation();
   const [inputField, setInputField] = useState({
-    // email: 'dprajapati15302@gmail.com',
-    // password: '123456',
-    email: '',
-    password: '',
+    email: 'dprajapati15302@gmail.com',
+    password: '123456',
+    // email: '',
+    // password: '',
   });
   const [loading, setLoading] = useState(false);
   const [forgetModal, setForgetModal] = useState(false);
@@ -42,9 +42,8 @@ const SignIn = ({setScreenState}) => {
         method: 'POST',
         data,
       });
-      if (response){
+      if (response.AccessToken){
         ToastAndroid.show('Sign-in successful!', ToastAndroid.SHORT);
-        // setInputField('')
         setLoading(false);
         navigation.navigate('HomeTabs');
         const token = response.AccessToken;
