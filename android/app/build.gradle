@@ -82,13 +82,6 @@ android {
             outputFileName = "CoinBT.apk"
         }
     }
-    applicationVariants.all { variant ->
-        if (variant.buildType.name == "release") {
-            variant.outputs.all {
-                outputFileName = "CoinBT.aab"
-            }
-        }
-    }
     namespace "com.rnnotification"
     defaultConfig {
         applicationId "com.rnnotification"

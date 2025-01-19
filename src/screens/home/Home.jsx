@@ -3,22 +3,18 @@ import {
   View,
   Text,
   Image,
-  ScrollView,
   StyleSheet,
   Dimensions,
   FlatList,
   TouchableOpacity,
-  Button,
-  ToastAndroid,
   Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import AppHeader from '../../common/AppHeader';
 import SpaceBetween from '../../common/SpaceBetween';
 import {Colors} from '../../common/AppColors';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import CommonInput from '../../common/CommonInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LoaderView from '../../common/LoaderView';
@@ -79,12 +75,12 @@ const Dashboard = () => {
       }
 
       if (isRefresh) {
-        setIcons(res); // Replace the icons list on refresh
+        setIcons(res);
       } else {
-        setIcons(prevIcons => [...prevIcons, ...res]); // Append new data to existing list
+        setIcons(prevIcons => [...prevIcons, ...res]); 
       }
 
-      setPage(pageNum); // Update the current page
+      setPage(pageNum);
     } catch (error) {
       console.log('Error fetching coins: ', error);
     } finally {
@@ -221,7 +217,6 @@ const Dashboard = () => {
                       : '0'
                   }`}
                 </Text>
-                {/* <Text style={styles.change}>↑ Rs 206,920 (10.6%)</Text> */}
               </View>
               <View>
                 <Text style={{marginTop: 10}}>
@@ -242,7 +237,6 @@ const Dashboard = () => {
             marginHorizontal: 8,
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
-            // marginBottom: 300,
           }}>
           <KeyboardAwareScrollView>
             <CommonInput
@@ -267,9 +261,6 @@ const Dashboard = () => {
                   <Text style={styles.textStyle}>Market Statistics</Text>
                 </View>
                 <View>
-                  {/* <Text style={styles.textBorderStyle}>
-                    All <AntDesign name={'right'} color={'#fff'} size={18} />
-                  </Text> */}
                 </View>
               </>
             }
@@ -285,9 +276,6 @@ const Dashboard = () => {
                 style={{
                   backgroundColor:
                     index % 2 === 0 ? Colors.container2 : Colors.card2,
-                  // marginVertical: 5, // Add spacing between items
-                  // padding: 10, // Add padding for better appearance
-                  borderRadius: 10, // Optional: Add rounded corners
                 }}>
                 <SpaceBetween
                   spaceBetweenStyle={{paddingVertical: 20}}
@@ -325,7 +313,6 @@ const Dashboard = () => {
                         </Text>
                         <Text
                           style={{
-                            // color: index % 2 === 0 ? 'red' : 'green',
                             color: 'orange',
                             textAlign: 'center',
                             width: '100%',
@@ -335,7 +322,6 @@ const Dashboard = () => {
                       </View>
                       <View>
                         <Text style={{color: '#fff', textAlign: 'right'}}>
-                          {/* {item.price_change_24h.toFixed(2)} */}
                           INR
                         </Text>
                         <Text

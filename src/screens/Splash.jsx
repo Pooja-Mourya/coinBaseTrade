@@ -55,10 +55,10 @@ const Splash = () => {
           )}
 
           {screenState === 'signUp' && (
-            <SignUp setScreenState={() => setScreenState('signIn')} />
+            <SignUp setScreenState={setScreenState} />
           )}
           {screenState === 'signIn' && (
-            <SignIn setScreenState={() => setScreenState('signUp')} />
+            <SignIn setScreenState={setScreenState} />
           )}
         </>
       }

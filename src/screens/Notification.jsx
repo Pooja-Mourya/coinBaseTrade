@@ -14,69 +14,109 @@ import {useDispatch, useSelector} from 'react-redux';
 import apiService from '../redux/apiService';
 import {NotificationCount} from '../redux/AuthSlice';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import axios from 'axios';
 
 const Notification = () => {
   const token = useSelector(state => state.auth.userData);
   const profileData = useSelector(state => state.auth.profileData);
   const dispatch = useDispatch();
   const [notificationData, setNotificationData] = useState();
-  useEffect(() => {
-    const fetchNotification = async () => {
-      try {
-        const res = await apiService({
-          endpoint: `/notification/getById/${profileData?.user?._id}`,
-          method: 'GET',
-          headers: {
-            Authorization: token,
-          },
-        });
-        dispatch(NotificationCount(res.notifications.length));
-        setNotificationData(res.notifications);
-      } catch (error) {
-        console.log('notification error : ', error);
-        ToastAndroid.show(error.message, ToastAndroid.SHORT);
-      }
-    };
-    fetchNotification();
-  }, [token]);
-
-  const handleDelete = async id => {
+  const fetchNotification = async () => {
     try {
       const res = await apiService({
-        endpoint: `/notification/deleteById/${id}`,
-        method: 'DELETE',
+        endpoint: `/notification/getById/${profileData?.user?._id}`,
+        method: 'GET',
         headers: {
           Authorization: token,
         },
       });
+      dispatch(NotificationCount(res.notifications.length));
+      setNotificationData(res.notifications);
+    } catch (error) {
+      console.log('notification error : ', error);
+      ToastAndroid.show(error.message, ToastAndroid.SHORT);
+    }
+  };
+  useEffect(() => {
+    fetchNotification();
+  }, [token]);
+
+  // const handleDelete1 = async id => {
+  //   try {
+  //     const res = await apiService({
+  //       endpoint: `/notification/deleteById/${id}`,
+  //       method: 'DELETE',
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     });
+  //     fetchNotification();
+  //     setNotificationData(prevData =>
+  //       prevData.filter(notification => notification._id !== id),
+  //     );
+  //     dispatch(NotificationCount(notificationData.length - 1));
+
+  //     console.log('delete notification : ', res);
+  //   } catch (error) {
+  //     console.log('delete notification delete :', error);
+  //   }
+  // };
+
+  const handleDelete = async id => {
+    try {
+      const res = await axios.delete(
+        `https://coinbt.in/api/v1/notification/deleteById/${id}`,
+        {
+          headers: {
+            Authorization: token, // Ensure token is defined
+          },
+        },
+      );
+
+      // Show success toast
+      ToastAndroid.show(
+        'Notification deleted successfully!',
+        ToastAndroid.SHORT, // Toast duration
+      );
+
+      // Optionally update the UI or state here
+
       fetchNotification();
       setNotificationData(prevData =>
         prevData.filter(notification => notification._id !== id),
       );
       dispatch(NotificationCount(notificationData.length - 1));
-
-      console.log('delete notification : ', res);
     } catch (error) {
-      console.log('delete notification delete :', error);
+      // Show error toast
+      const errorMessage =
+        error.response?.data?.message || 'Failed to delete notification.';
+      ToastAndroid.show(
+        errorMessage,
+        ToastAndroid.LONG, // Toast duration for error messages
+      );
+
+      console.error('Error deleting notification:', error);
     }
   };
 
-  const renderItem = ({item}) => (
-    <View style={styles.card}>
-      <View style={styles.iconContainer}>
-        <MaterialIcons name="notifications" size={24} color="#4caf50" />
+  const renderItem = ({item}) => {
+    return (
+      <View style={styles.card}>
+        <View style={styles.iconContainer}>
+          <MaterialIcons name="notifications" size={24} color="#4caf50" />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.message}>{item.message}</Text>
+          <Text style={styles.date}>
+            {new Date(item.createdAt).toLocaleString()}
+          </Text>
+        </View>
+        <TouchableOpacity onPress={() => handleDelete(item._id)}>
+          <MaterialIcons name="delete" size={24} color="tomato" />
+        </TouchableOpacity>
       </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.message}>{item.message}</Text>
-        <Text style={styles.date}>
-          {new Date(item.createdAt).toLocaleString()}
-        </Text>
-      </View>
-      <TouchableOpacity onPress={() => handleDelete(item._id)}>
-        <MaterialIcons name="delete" size={24} color="tomato" />
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  };
   return (
     <LinearGradient colors={['#141E30', '#243B55']} style={styles.container}>
       <AppHeader username={'Notification'} />

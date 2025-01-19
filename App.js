@@ -298,3 +298,5 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+// eas build -p android --profile preview

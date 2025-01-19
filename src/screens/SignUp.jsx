@@ -18,6 +18,9 @@ import CommonInput from '../common/CommonInput';
 import OTPInput from './OtpInput';
 import axios from 'axios';
 import DocumentPickerComponent from '../common/DocumentPickerComponent';
+import {statesAndDistricts} from "./CountryAndState"
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 const {width} = Dimensions.get('window');
 
@@ -37,7 +40,7 @@ const SignUp = ({setScreenState, token}) => {
     city: '',
     pincode: '',
     panNo: '',
-    aadharNo: '',
+    aadharNo: 0,
     accNo: '',
     ifsc: '',
     branch: '',
@@ -48,286 +51,17 @@ const SignUp = ({setScreenState, token}) => {
 
   const [loader, setLoader] = useState(false);
   const [otpModal, setOtpModal] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
+  const handleDateChange = (event, selectedDate) => {
+    setShowDatePicker(false); // Close the date picker
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+      handleChange('dob', formattedDate);
+    }
+  };
   const handleChange = (name, value) => {
     setFormData(prevState => ({...prevState, [name]: value}));
-  };
-
-  const statesAndDistricts = {
-    'Andhra Pradesh': [
-      'Anantapur',
-      'Chittoor',
-      'East Godavari',
-      'Guntur',
-      'Krishna',
-      'Kurnool',
-      'Nellore',
-      'Prakasam',
-      'Srikakulam',
-      'Visakhapatnam',
-      'Vizianagaram',
-      'West Godavari',
-      'YSR Kadapa',
-    ],
-    'Arunachal Pradesh': [
-      'Tawang',
-      'West Kameng',
-      'East Kameng',
-      'Papum Pare',
-      'Kurung Kumey',
-      'Kra Daadi',
-      'Lower Subansiri',
-      'Upper Subansiri',
-      'West Siang',
-      'East Siang',
-      'Siang',
-      'Upper Siang',
-      'Lower Siang',
-      'Lower Dibang Valley',
-      'Dibang Valley',
-      'Anjaw',
-      'Lohit',
-      'Namsai',
-      'Changlang',
-      'Tirap',
-      'Longding',
-    ],
-    Assam: [
-      'Baksa',
-      'Barpeta',
-      'Biswanath',
-      'Bongaigaon',
-      'Cachar',
-      'Charaideo',
-      'Chirang',
-      'Darrang',
-      'Dhemaji',
-      'Dhubri',
-      'Dibrugarh',
-      'Dima Hasao',
-      'Goalpara',
-      'Golaghat',
-      'Hailakandi',
-      'Hojai',
-      'Jorhat',
-      'Kamrup',
-      'Kamrup Metropolitan',
-      'Karbi Anglong',
-      'Karimganj',
-      'Kokrajhar',
-      'Lakhimpur',
-      'Majuli',
-      'Morigaon',
-      'Nagaon',
-      'Nalbari',
-      'Sivasagar',
-      'Sonitpur',
-      'South Salmara-Mankachar',
-      'Tinsukia',
-      'Udalguri',
-      'West Karbi Anglong',
-    ],
-    Bihar: [
-      'Araria',
-      'Arwal',
-      'Aurangabad',
-      'Banka',
-      'Begusarai',
-      'Bhagalpur',
-      'Bhojpur',
-      'Buxar',
-      'Darbhanga',
-      'East Champaran',
-      'Gaya',
-      'Gopalganj',
-      'Jamui',
-      'Jehanabad',
-      'Kaimur',
-      'Katihar',
-      'Khagaria',
-      'Kishanganj',
-      'Lakhisarai',
-      'Madhepura',
-      'Madhubani',
-      'Munger',
-      'Muzaffarpur',
-      'Nalanda',
-      'Nawada',
-      'Patna',
-      'Purnia',
-      'Rohtas',
-      'Saharsa',
-      'Samastipur',
-      'Saran',
-      'Sheikhpura',
-      'Sheohar',
-      'Sitamarhi',
-      'Siwan',
-      'Supaul',
-      'Vaishali',
-      'West Champaran',
-    ],
-    Chhattisgarh: [
-      'Balod',
-      'Baloda Bazar',
-      'Balrampur',
-      'Bastar',
-      'Bemetara',
-      'Bijapur',
-      'Bilaspur',
-      'Dantewada',
-      'Dhamtari',
-      'Durg',
-      'Gariaband',
-      'Gaurela-Pendra-Marwahi',
-      'Janjgir-Champa',
-      'Jashpur',
-      'Kabirdham',
-      'Kanker',
-      'Kondagaon',
-      'Korba',
-      'Korea',
-      'Mahasamund',
-      'Mungeli',
-      'Narayanpur',
-      'Raigarh',
-      'Raipur',
-      'Rajnandgaon',
-      'Sukma',
-      'Surajpur',
-      'Surguja',
-    ],
-    Goa: ['North Goa', 'South Goa'],
-    Gujarat: [
-      'Ahmedabad',
-      'Amreli',
-      'Anand',
-      'Aravalli',
-      'Banaskantha',
-      'Bharuch',
-      'Bhavnagar',
-      'Botad',
-      'Chhota Udepur',
-      'Dahod',
-      'Dang',
-      'Devbhoomi Dwarka',
-      'Gandhinagar',
-      'Gir Somnath',
-      'Jamnagar',
-      'Junagadh',
-      'Kheda',
-      'Kutch',
-      'Mahisagar',
-      'Mehsana',
-      'Morbi',
-      'Narmada',
-      'Navsari',
-      'Panchmahal',
-      'Patan',
-      'Porbandar',
-      'Rajkot',
-      'Sabarkantha',
-      'Surat',
-      'Surendranagar',
-      'Tapi',
-      'Vadodara',
-      'Valsad',
-    ],
-    Haryana: [
-      'Ambala',
-      'Bhiwani',
-      'Charkhi Dadri',
-      'Faridabad',
-      'Fatehabad',
-      'Gurugram',
-      'Hisar',
-      'Jhajjar',
-      'Jind',
-      'Kaithal',
-      'Karnal',
-      'Kurukshetra',
-      'Mahendragarh',
-      'Nuh',
-      'Palwal',
-      'Panchkula',
-      'Panipat',
-      'Rewari',
-      'Rohtak',
-      'Sirsa',
-      'Sonipat',
-      'Yamunanagar',
-    ],
-    'Himachal Pradesh': [
-      'Bilaspur',
-      'Chamba',
-      'Hamirpur',
-      'Kangra',
-      'Kinnaur',
-      'Kullu',
-      'Lahaul and Spiti',
-      'Mandi',
-      'Shimla',
-      'Sirmaur',
-      'Solan',
-      'Una',
-    ],
-
-    'Andaman and Nicobar Islands': [
-      'Nicobar',
-      'North and Middle Andaman',
-      'South Andaman',
-    ],
-    Chandigarh: ['Chandigarh'],
-    'Dadra and Nagar Haveli and Daman and Diu': ['Daman', 'Diu', 'Silvassa'],
-    Delhi: [
-      'Central Delhi',
-      'East Delhi',
-      'New Delhi',
-      'North Delhi',
-      'North East Delhi',
-      'North West Delhi',
-      'Shahdara',
-      'South Delhi',
-      'South East Delhi',
-      'South West Delhi',
-      'West Delhi',
-    ],
-    Lakshadweep: [
-      'Agatti',
-      'Amini',
-      'Androth',
-      'Bitra',
-      'Chetlat',
-      'Kadmat',
-      'Kalpeni',
-      'Kavaratti',
-      'Kiltan',
-      'Minicoy',
-    ],
-    Puducherry: ['Karaikal', 'Mahe', 'Puducherry', 'Yanam'],
-    'Jammu and Kashmir': [
-      'Anantnag',
-      'Bandipora',
-      'Baramulla',
-      'Budgam',
-      'Doda',
-      'Ganderbal',
-      'Jammu',
-      'Kathua',
-      'Kishtwar',
-      'Kulgam',
-      'Kupwara',
-      'Poonch',
-      'Pulwama',
-      'Rajouri',
-      'Ramban',
-      'Reasi',
-      'Samba',
-      'Shopian',
-      'Srinagar',
-      'Udhampur',
-    ],
-    Ladakh: ['Kargil', 'Leh'],
   };
 
   const handleSubmit = async () => {
@@ -378,7 +112,10 @@ const SignUp = ({setScreenState, token}) => {
         ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
         setOtpModal(true);
       }
-      setLoader(false);
+      if (response.data.message === 'User already exists') {
+        ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+        setOtpModal(false);
+      }
     } catch (error) {
       setLoader(false);
       if (error.response) {
@@ -488,6 +225,35 @@ const SignUp = ({setScreenState, token}) => {
               );
             }
 
+            if (key === "dob") {
+              return (
+                <View key={key} style={{marginVertical: 10}}>
+                  <Text style={{color: '#fff'}}>Date of Birth</Text>
+                  <TouchableOpacity
+                    onPress={() => setShowDatePicker(true)}
+                    style={{
+                      backgroundColor: '#2C2C85',
+                      padding: 10,
+                      borderRadius: 5,
+                      marginVertical: 5,
+                    }}>
+                    <Text style={{color: '#fff'}}>
+                      {formData.dob || 'Select Date of Birth'}
+                    </Text>
+                  </TouchableOpacity>
+                  {showDatePicker && (
+                    <DateTimePicker
+                      value={formData.dob ? new Date(formData.dob) : new Date()}
+                      mode="date"
+                      display="default"
+                      onChange={handleDateChange}
+                      maximumDate={new Date()} // Prevent future dates
+                    />
+                  )}
+                </View>
+              );
+            }
+            
             if (key === 'state') {
               return (
                 <View key={key} style={{marginVertical: 10}}>
@@ -498,7 +264,7 @@ const SignUp = ({setScreenState, token}) => {
                       color: '#fff',
                       backgroundColor: '#2C2C85',
                     }}>
-                    <Picker.Item label="Select State" value="" />
+                    <Picker.Item label="Select Country" value="" />
                     {Object.keys(statesAndDistricts).map(state => (
                       <Picker.Item key={state} label={state} value={state} />
                     ))}
@@ -519,7 +285,7 @@ const SignUp = ({setScreenState, token}) => {
                       backgroundColor: '#2C2C85',
                     }}
                     enabled={districts.length > 0}>
-                    <Picker.Item label="Select City" value="" />
+                    <Picker.Item label="Select State" value="" />
                     {districts.map(district => (
                       <Picker.Item
                         key={district}
@@ -551,7 +317,7 @@ const SignUp = ({setScreenState, token}) => {
                 !loader ? (
                   'Continue'
                 ) : (
-                  <ActivityIndicator size={'small'} color={'#fff'} />
+                  <ActivityIndicator size={'small'} color={'#000'} />
                 )
               }
               backgroundColor={Colors.button}
@@ -570,12 +336,13 @@ const SignUp = ({setScreenState, token}) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-
+    
       {otpModal && (
         <OTPInput
           visible={otpModal}
           emailAll={formData.email}
           onClose={() => setOtpModal(false)}
+          setScreenState={setScreenState}
         />
       )}
     </>

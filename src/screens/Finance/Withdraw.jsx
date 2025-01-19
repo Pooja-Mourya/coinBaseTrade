@@ -6,7 +6,7 @@ import {useSelector} from 'react-redux';
 import apiService from '../../redux/apiService';
 import CommonInput from '../../common/CommonInput';
 
-const Withdraw = ({closeModal}) => {
+const Withdraw = () => {
   const navigation = useNavigation();
   const profileData = useSelector(state => state.auth.profileData);
   const token = useSelector(state => state.auth.userData);
@@ -23,7 +23,7 @@ const Withdraw = ({closeModal}) => {
   }, [profileData?.user._id]);
 
   const handleOnChange = (name, value) => {
-    console.log('first');
+   
     setInput({
       ...input,
       [name]: name === 'amount' ? parseFloat(value) || '' : value, 
@@ -36,7 +36,7 @@ const Withdraw = ({closeModal}) => {
       return;
     }
     try {
-      await apiService({
+     const res = await apiService({
         endpoint: `/withdraw/usersRequest/${profileData?.user._id}`,
         data: {
           userId: profileData?.user._id,
@@ -46,9 +46,8 @@ const Withdraw = ({closeModal}) => {
           Authorization: token,
         },
       });
-      closeModal();
-      navigation.navigate('WithdrawList');
       ToastAndroid.show('withdraw request successfully', ToastAndroid.SHORT);
+      navigation.navigate('WithdrawList');
     } catch (error) {
       console.log('error:', error);
       ToastAndroid.show(error.message, ToastAndroid.SHORT);

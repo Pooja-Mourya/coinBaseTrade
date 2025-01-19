@@ -9,23 +9,22 @@ import {
   TouchableOpacity,
   ToastAndroid,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {Colors} from '../common/AppColors';
 import CommonInput from '../common/CommonInput';
-import {useNavigation} from '@react-navigation/native';
 import apiService from '../redux/apiService';
 import {useSelector} from 'react-redux';
 
-const OtpInput = ({visible, onClose, emailAll}) => {
-  const navigation = useNavigation();
+const OtpInput = ({visible, onClose, emailAll, setScreenState}) => {
+  
   const token = useSelector(state => state.auth.userData);
   const slideAnim = useRef(new Animated.Value(0)).current;
   const [loading, setLoading] = useState(false);
   const [otp, setOtp] = useState('');
 
   const handleChange = text => {
-    const sanitizedText = text.replace(/[^0-9]/g, '');
-    setOtp(sanitizedText);
+    setOtp(text.toUpperCase());
   };
 
   React.useEffect(() => {
@@ -49,11 +48,13 @@ const OtpInput = ({visible, onClose, emailAll}) => {
       ToastAndroid.show('Please enter the OTP.', ToastAndroid.SHORT);
       return;
     }
-
+  
     setLoading(true);
-    const data = {email: emailAll, otp};
-
+  
     try {
+      const data = { email: emailAll, otp };
+      console.log('Submitting OTP:', data);
+  
       const response = await apiService({
         endpoint: '/auth/verification',
         method: 'POST',
@@ -62,29 +63,29 @@ const OtpInput = ({visible, onClose, emailAll}) => {
         },
         data,
       });
-
-      if (response.message) {
-        ToastAndroid.show(response.message, ToastAndroid.SHORT);
-      }
-
-      if (
-        response.data?.message === 'already verified' ||
-        response.data?.message === 'otp verified successfully'
-      ) {
-        navigation.navigate('SignIn');
+  
+      console.log('API Response:', response);
+  
+      if (response.success) {
+        ToastAndroid.show(response.message || 'OTP verified successfully!', ToastAndroid.SHORT);
+        setScreenState('signIn'); 
+        onClose(); 
       } else {
-        navigation.navigate('Splash');
+        const message = response.message || 'Invalid OTP or verification failed.';
+        ToastAndroid.show(message, ToastAndroid.SHORT);
+        Alert.alert('Error', message);
       }
     } catch (error) {
+      console.error('Error during OTP verification:', error);
+  
       const errorMessage =
-        error.details?.error?._message ||
-        'OTP verification failed. Please try again.';
+        error.response?.data?.message || 'An unexpected error occurred.';
       ToastAndroid.show(errorMessage, ToastAndroid.SHORT);
-      console.error('OTP verification error:', errorMessage);
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <Modal transparent visible={visible} animationType="fade">
@@ -103,13 +104,13 @@ const OtpInput = ({visible, onClose, emailAll}) => {
             ],
           },
         ]}>
-        <TouchableOpacity onPress={onClose}>
+        <TouchableOpacity onPress={()=>onClose()}>
           <Text style={styles.closeIcon}>❌</Text>
         </TouchableOpacity>
         <Text style={styles.instructionText}>
           Enter the OTP sent to your email:
         </Text>
-        <Text style={styles.emailText}>{emailAll}</Text>
+        {/* <Text style={styles.emailText}>{emailAll}</Text> */}
         <CommonInput
           value={otp}
           onChangeText={handleChange}
