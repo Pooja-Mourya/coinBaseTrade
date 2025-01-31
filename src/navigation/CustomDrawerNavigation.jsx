@@ -13,15 +13,28 @@ const CustomDrawerNavigation = props => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const profileData = useSelector(state => state.auth.profileData);
+  // const handleLogout = () => {
+  //   try {
+  //     dispatch(UserData(''));
+  //     navigation.navigate('Splash');
+  //   } catch (error) {
+  //     console.error('Error during logout:', error);
+  //   }
+  // };
+
   const handleLogout = () => {
     try {
-      dispatch(UserData(''));
-      navigation.navigate('Splash');
+      dispatch(UserData('')); // Clear user data
+  
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Splash' }], // Reset stack to Splash
+      });
     } catch (error) {
       console.error('Error during logout:', error);
     }
   };
-
+  
   return (
     <>
       <DrawerContentScrollView {...props}>

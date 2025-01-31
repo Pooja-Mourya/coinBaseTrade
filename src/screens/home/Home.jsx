@@ -158,17 +158,23 @@ const Dashboard = () => {
           text: 'Confirm',
           onPress: async () => {
             try {
+              // Ensure price calculations are only applied to valid numbers
+              const priceInUSD = itemStore.current_price
+                ? Number(itemStore.current_price).toFixed(2)
+                : '0.00';
+
+              const totalAmountInINR =
+                itemStore.current_price && counter && inrRate
+                  ? (itemStore.current_price * counter * inrRate).toFixed(2)
+                  : '0.00';
+
               const transactionData = {
                 userId: userId.user._id,
                 coinName: itemStore.name,
                 code: itemStore.symbol.toUpperCase(),
                 quantity: counter,
-                priceInUSD: itemStore.current_price.toFixed(2),
-                totalAmountInINR: (
-                  itemStore.current_price *
-                  counter *
-                  inrRate
-                ).toFixed(2),
+                priceInUSD,
+                totalAmountInINR,
               };
 
               const response = await axios.post(
@@ -187,8 +193,8 @@ const Dashboard = () => {
             } catch (error) {
               console.error('Error creating transaction:', error);
               Alert.alert(
-                'You can not Buy The Coin',
-                `Insufficient Balance,  ₹${totalInrAmount}`,
+                'You cannot Buy The Coin',
+                `Insufficient Balance, ₹${totalInrAmount}`,
               );
               setBuyCoin(false);
             }
@@ -197,6 +203,7 @@ const Dashboard = () => {
       ],
     );
   };
+
   return (
     <LinearGradient colors={['#141E30', '#243B55']} style={styles.container}>
       <AppHeader />
@@ -225,138 +232,157 @@ const Dashboard = () => {
           }
         />
       </LinearGradient>
-     
-        <View
-          style={{
-            width: width / 1.04,
-            backgroundColor: Colors.container2,
-            marginHorizontal: 8,
+
+      <View
+        style={{
+          width: width / 1.04,
+          backgroundColor: Colors.container2,
+          marginHorizontal: 8,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        }}>
+        <KeyboardAwareScrollView>
+          <CommonInput
+            value={search}
+            onChangeText={e => setSearch(e)}
+            placeholder={'Search coin by name'}
+            rightIcon={'search'}
+            inputStyle={{paddingVertical: 5}}
+          />
+        </KeyboardAwareScrollView>
+        <SpaceBetween
+          spaceBetweenStyle={{
+            backgroundColor: Colors.card1,
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
-          }}>
-          <KeyboardAwareScrollView>
-            <CommonInput
-              value={search}
-              onChangeText={e => setSearch(e)}
-              placeholder={'Search coin by name'}
-              rightIcon={'search'}
-              inputStyle={{paddingVertical: 5}}
-            />
-          </KeyboardAwareScrollView>
-          <SpaceBetween
-            spaceBetweenStyle={{
-              backgroundColor: Colors.card1,
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-              paddingVertical: 15,
-              paddingHorizontal: 10,
-            }}
-            children={
-              <>
-                <View>
-                  <Text style={styles.textStyle}>Market Statistics</Text>
-                </View>
-                <View></View>
-              </>
-            }
-          />
-          <FlatList
-            data={icons.filter(se =>
-              se.name.toLowerCase().includes(search.toLowerCase()),
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item, index}) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor:
-                    index % 2 === 0 ? Colors.container2 : Colors.card2,
-                }}>
-                <SpaceBetween
-                  spaceBetweenStyle={{paddingVertical: 20}}
-                  children={
-                    <>
-                      <View
-                        style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Image
-                          source={{uri: item.image}}
-                          style={{width: 25, height: 25, marginRight: 10}}
-                        />
-                        <View>
-                          <Text
-                            style={{
-                              color: '#fff',
-                              width: '100%',
-                            }}>{`${item.name} (${item.symbol})`}</Text>
-                          <Text
-                            style={{
-                              color: '#e37373',
-                              width: '100%',
-                            }}>{`24h(INR) ${item.price_change_percentage_24h_in_currency_inr.toFixed(
-                            2,
-                          )}`}</Text>
-                        </View>
-                      </View>
-                      <View>
-                        <Text
-                          style={{
-                            color: '#fff',
-                            textAlign: 'center',
-                            width: '100%',
-                          }}>
-                          USD
-                        </Text>
-                        <Text
-                          style={{
-                            color: 'orange',
-                            textAlign: 'center',
-                            width: '100%',
-                          }}>
-                          $ {item.current_price}
-                        </Text>
-                      </View>
-                      <View>
-                        <Text style={{color: '#fff', textAlign: 'right'}}>
-                          INR
-                        </Text>
-                        <Text
-                          style={{
-                            color: 'red',
-                            textAlign: 'right',
-                          }}>
-                          ₹ {item.current_price_inr.toFixed(2)}
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setItemStore(item);
-                          setBuyCoin(true);
-                        }}>
-                        <Text
-                          style={{
-                            color: '#fff',
-                            backgroundColor: 'green',
-                            paddingHorizontal: 15,
-                            borderRadius: 10,
-                            paddingVertical: 5,
-                            textAlign: 'center',
-                          }}>
-                          Buy
-                        </Text>
-                      </TouchableOpacity>
-                    </>
-                  }
-                />
+            paddingVertical: 15,
+            paddingHorizontal: 10,
+          }}
+          children={
+            <>
+              <View>
+                <Text style={styles.textStyle}>Market Statistics</Text>
               </View>
-            )}
-            onEndReached={handleLoadMore}
-            onEndReachedThreshold={0.5}
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
-            ListFooterComponent={renderFooter}
-          />
-        </View>
-     
+              <View></View>
+            </>
+          }
+        />
+        <FlatList
+          data={icons.filter(se =>
+            se.name.toLowerCase().includes(search.toLowerCase()),
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => (
+            <View
+              key={index}
+              style={{
+                backgroundColor:
+                  index % 2 === 0 ? Colors.container2 : Colors.card2,
+              }}>
+              <SpaceBetween
+                spaceBetweenStyle={{paddingVertical: 20}}
+                children={
+                  <>
+                    {/* Coin Info */}
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <Image
+                        source={{uri: item.image}}
+                        style={{width: 25, height: 25, marginRight: 10}}
+                      />
+                      <View>
+                        <Text
+                          style={{
+                            color: '#fff',
+                            width: '100%',
+                          }}>{`${item.name} (${item.symbol})`}</Text>
+
+                        <Text
+                          style={{
+                            color: '#e37373',
+                            width: '100%',
+                          }}>
+                          {`24h (INR) ${
+                            item.price_change_percentage_24h_in_currency_inr
+                              ? Number(
+                                  item.price_change_percentage_24h_in_currency_inr,
+                                ).toFixed(2)
+                              : '0.00'
+                          }`}
+                        </Text>
+                      </View>
+                    </View>
+
+                    {/* Price in USD */}
+                    <View>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          textAlign: 'center',
+                          width: '100%',
+                        }}>
+                        USD
+                      </Text>
+                      <Text
+                        style={{
+                          color: 'orange',
+                          textAlign: 'center',
+                          width: '100%',
+                        }}>
+                        ${' '}
+                        {item.current_price
+                          ? Number(item.current_price).toFixed(2)
+                          : '0.00'}
+                      </Text>
+                    </View>
+
+                    {/* Price in INR */}
+                    <View>
+                      <Text style={{color: '#fff', textAlign: 'right'}}>
+                        INR
+                      </Text>
+                      <Text
+                        style={{
+                          color: 'red',
+                          textAlign: 'right',
+                        }}>
+                        ₹{' '}
+                        {item.current_price_inr
+                          ? Number(item.current_price_inr).toFixed(2)
+                          : '0.00'}
+                      </Text>
+                    </View>
+
+                    {/* Buy Button */}
+                    <TouchableOpacity
+                      onPress={() => {
+                        setItemStore(item);
+                        setBuyCoin(true);
+                      }}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          backgroundColor: 'green',
+                          paddingHorizontal: 15,
+                          borderRadius: 10,
+                          paddingVertical: 5,
+                          textAlign: 'center',
+                        }}>
+                        Buy
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                }
+              />
+            </View>
+          )}
+          onEndReached={handleLoadMore}
+          onEndReachedThreshold={0.5}
+          refreshing={isRefreshing}
+          onRefresh={handleRefresh}
+          ListFooterComponent={renderFooter}
+        />
+      </View>
+
       {buyCoin && (
         <CommonModal
           visible={buyCoin}
@@ -405,11 +431,10 @@ const Dashboard = () => {
           }
         />
       )}
+
     </LinearGradient>
   );
 };
-
-
 
 const styles = StyleSheet.create({
   container: {
