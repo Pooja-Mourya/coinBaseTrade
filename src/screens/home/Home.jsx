@@ -8,6 +8,7 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import AppHeader from '../../common/AppHeader';
@@ -58,7 +59,6 @@ const Dashboard = () => {
   const handleCoin = async (pageNum = 1, isRefresh = false) => {
     if (loading) return;
     setLoading(true);
-
     try {
       const res = await apiService({
         endpoint: `/crypto/getList?page=${pageNum}&per_page=${perPage}`,
@@ -77,9 +77,8 @@ const Dashboard = () => {
       if (isRefresh) {
         setIcons(res);
       } else {
-        setIcons(prevIcons => [...prevIcons, ...res]); 
+        setIcons(prevIcons => [...prevIcons, ...res]);
       }
-
       setPage(pageNum);
     } catch (error) {
       console.log('Error fetching coins: ', error);
@@ -102,19 +101,18 @@ const Dashboard = () => {
     }
   };
 
+  useEffect(() => {
+    handleCoin();
+    // const intervalId = setInterval(() => {
+    //   handleRefresh();
+    // }, 50000);
+    // return () => clearInterval(intervalId);
+  }, []);
+
   const renderFooter = () => {
     if (!loading) return null;
     return <ActivityIndicator size="large" color="#0000ff" />;
   };
-
-  useEffect(() => {
-    handleCoin();
-    const intervalId = setInterval(() => {
-      handleRefresh();
-    }, 50000);
-    return () => clearInterval(intervalId);
-  }, []);
-
   useEffect(() => {
     const fetchExchangeRate = async () => {
       try {
@@ -227,9 +225,7 @@ const Dashboard = () => {
           }
         />
       </LinearGradient>
-      {loading ? (
-        <LoaderView />
-      ) : (
+     
         <View
           style={{
             width: width / 1.04,
@@ -260,8 +256,7 @@ const Dashboard = () => {
                 <View>
                   <Text style={styles.textStyle}>Market Statistics</Text>
                 </View>
-                <View>
-                </View>
+                <View></View>
               </>
             }
           />
@@ -361,7 +356,7 @@ const Dashboard = () => {
             ListFooterComponent={renderFooter}
           />
         </View>
-      )}
+     
       {buyCoin && (
         <CommonModal
           visible={buyCoin}
@@ -382,7 +377,8 @@ const Dashboard = () => {
                   Price(INR) : ₹ {itemStore.current_price_inr.toFixed(2)}
                 </Text>
                 <Text style={{color: '#fff'}}>
-                  Total Price : ₹ {itemStore.current_price_inr.toFixed(2) * counter.toFixed(2)}
+                  Total Price : ₹{' '}
+                  {itemStore.current_price_inr.toFixed(2) * counter.toFixed(2)}
                 </Text>
               </View>
               <SpaceBetween
@@ -412,6 +408,8 @@ const Dashboard = () => {
     </LinearGradient>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {

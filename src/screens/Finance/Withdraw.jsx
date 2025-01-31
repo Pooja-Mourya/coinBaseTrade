@@ -12,21 +12,23 @@ const Withdraw = () => {
   const token = useSelector(state => state.auth.userData);
 
   const [input, setInput] = useState({
-    userId: 0,
+    userId: '',
     amount: '',
   });
 
   useEffect(() => {
     if (profileData?.user._id) {
-      setInput(prevInput => ({...prevInput, userId:profileData?.user?.userId}));
+      setInput(prevInput => ({
+        ...prevInput,
+        userId: profileData?.user?.userId,
+      }));
     }
   }, [profileData?.user._id]);
 
   const handleOnChange = (name, value) => {
-   
     setInput({
       ...input,
-      [name]: name === 'amount' ? parseFloat(value) || '' : value, 
+      [name]: name === 'amount' ? parseFloat(value) || '' : value,
     });
   };
 
@@ -35,21 +37,24 @@ const Withdraw = () => {
       console.log('Please enter a valid amount.');
       return;
     }
+    const data = {
+      userId: profileData?.user._id,
+      amount: +input.amount,
+    };
     try {
-     const res = await apiService({
-        endpoint: `/withdraw/usersRequest/${profileData?.user._id}`,
-        data: {
-          userId: profileData?.user._id,
-          amount: input.amount,
-        },
+      const res = await apiService({
+        endpoint: `/withdraw/request/`,
+        method:'POST',
+        data,
         headers: {
           Authorization: token,
         },
       });
+      setInput({ amount: "" }); 
       ToastAndroid.show('withdraw request successfully', ToastAndroid.SHORT);
       navigation.navigate('WithdrawList');
     } catch (error) {
-      console.log('error:', error);
+      console.log('error withdraw:', error);
       ToastAndroid.show(error.message, ToastAndroid.SHORT);
     }
   };
@@ -60,7 +65,7 @@ const Withdraw = () => {
       <CommonInput
         placeholder={'Enter Amount'}
         onChangeText={value => handleOnChange('amount', value)}
-        value={input.amount.toString()} 
+        value={input.amount}
         keyboardType="numeric"
       />
       <CommonButton title={'Withdraw Request'} onPress={requestWithdraw} />

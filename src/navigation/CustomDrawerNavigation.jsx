@@ -7,6 +7,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {UserData} from '../redux/AuthSlice';
+import { Colors } from '../common/AppColors';
 
 const CustomDrawerNavigation = props => {
   const dispatch = useDispatch();
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
   drawerButtonText: {
     fontSize: 16,
     textAlign: 'center',
+    color:Colors.card1
   },
 });
 
