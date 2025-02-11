@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   NavigationContainer,
   CommonActions,
   useNavigation,
 } from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createDrawerNavigator, DrawerActions} from '@react-navigation/drawer';
-import {Alert, AppState, ToastAndroid, TouchableOpacity} from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator, DrawerActions } from '@react-navigation/drawer';
+import { Alert, AppState, ToastAndroid, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Home from './src/screens/home/Home';
 import Trending from './src/screens/trending/Trending';
@@ -24,7 +24,7 @@ import UsersCoins from './src/screens/user/allUsersCoins/UsersCoins';
 import GenerateReport from './src/screens/user/report/GenerateReport';
 import CustomTabNavigation from './src/navigation/CustomTabNavigation';
 import CustomDrawerNavigation from './src/navigation/CustomDrawerNavigation';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BTC from './src/screens/Option/btc/BTC';
 import ETH from './src/screens/Option/etc/ETH';
 import UserProfile from './src/screens/profile/UserProfile';
@@ -41,8 +41,9 @@ import Online from './src/screens/Finance/deposit/Online';
 import UserSupport from './src/screens/userSupport/UserSupport';
 import Convert from './src/screens/convert/Convert';
 import NetInfo from '@react-native-community/netinfo';
-import {NotificationCount} from './src/redux/AuthSlice';
+import { NotificationCount } from './src/redux/AuthSlice';
 import apiService from './src/redux/apiService';
+import SignUp from './src/screens/SignUp';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,7 +53,7 @@ function MyTabs() {
   return (
     <Tab.Navigator
       tabBar={props => <CustomTabNavigation {...props} />}
-      screenOptions={({route}) => ({
+      screenOptions={({ route }) => ({
         tabBarBadge: 5,
         tabBarBadgeStyle: {
           color: 'white',
@@ -83,127 +84,147 @@ function DrawerNavigation() {
       {/* <Drawer.Screen name="Blog" component={UserProfile} />
       <Drawer.Screen name="Community" component={UserProfile} /> */}
       <Drawer.Screen name="Convert" component={Convert} />
+      <Drawer.Screen name="SignUp" component={SignUp} />
     </Drawer.Navigator>
   );
 }
 
-function StackNavigation({token}) {
-  const navigation = useNavigation();
+function StackNavigation({ token }) {
+  const navigation = useNavigation()
+
   useEffect(() => {
-    if (token) {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{name: 'HomeTabs'}],
-        }),
-      );
-    }
+    // Determine the screen name based on the token
+    const getScreenName = () => {
+      if (token) {
+        return 'HomeTabs'; // Authenticated users go to HomeTabs
+      } else {
+        return 'Splash'; // Unauthenticated users go to Login
+      }
+    };
+
+    const screenName = getScreenName();
+
+    // Dispatch the reset action with the determined screen name
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: screenName }],
+      })
+    );
+
+    // Log the screen name for debugging purposes
+    console.log(`Navigating to screen: ${screenName}`);
   }, [token, navigation]);
 
   return (
     <Stack.Navigator
       initialRouteName="Splash"
       screenOptions={{
-        headerTitleStyle: {fontWeight: 'bold'},
+        headerTitleStyle: { fontWeight: 'bold' },
         gestureEnabled: true,
       }}>
       <Stack.Screen
         name="Splash"
         component={Splash}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="SignIn"
         component={SignIn}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
+      {/* <Stack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{ headerShown: false }}
+      /> */}
 
       {/* option  */}
-      <Stack.Screen name="BTC" component={BTC} options={{headerShown: false}} />
-      <Stack.Screen name="ETH" component={ETH} options={{headerShown: false}} />
+      <Stack.Screen name="BTC" component={BTC} options={{ headerShown: false }} />
+      <Stack.Screen name="ETH" component={ETH} options={{ headerShown: false }} />
 
       {/* finance  */}
       <Stack.Screen
         name="WithdrawList"
         component={WithdrawList}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="UserTransaction"
         component={UserTransaction}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Online"
         component={Online}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="UPIPay"
         component={UPIPay}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="QRPay"
         component={QRPay}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="BankPay"
         component={BankPay}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* trending */}
       <Stack.Screen
         name="Portfolio"
         component={Portfolio}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="BuyCoin"
         component={BuyCoin}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="SellCoin"
         component={SellCoin}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       {/* user  */}
       <Stack.Screen
         name="Register"
         component={Register}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="UserList"
         component={UserList}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Funds"
         component={Funds}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Withdraw"
         component={Withdraw}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="Complains"
         component={Complains}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="UsersCoins"
         component={UsersCoins}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="GenerateReport"
         component={GenerateReport}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       {/* HomeTabs */}
@@ -215,14 +236,14 @@ function StackNavigation({token}) {
           headerLeft: () => (
             <TouchableOpacity
               onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-              <Icon name="menu" size={30} style={{marginLeft: 10}} />
+              <Icon name="menu" size={30} style={{ marginLeft: 10 }} />
             </TouchableOpacity>
           ),
         }}
       />
     </Stack.Navigator>
   );
-}
+};
 
 export default function App() {
   const [token, setToken] = useState();
@@ -298,5 +319,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-// eas build -p android --profile preview

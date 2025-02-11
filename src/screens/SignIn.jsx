@@ -20,10 +20,10 @@ import { AllData, IsAdmin, UserData } from '../redux/AuthSlice';
 const SignIn = ({setScreenState}) => {
   const navigation = useNavigation();
   const [inputField, setInputField] = useState({
-    // email: 'dprajapati15302@gmail.com',
-    // password: '123456',
-    email: '',
-    password: '',
+    email: 'dprajapati15302@gmail.com',
+    password: '123456',
+    // email: '',
+    // password: '',
   });
   const [loading, setLoading] = useState(false);
   const [forgetModal, setForgetModal] = useState(false);
@@ -83,7 +83,6 @@ const SignIn = ({setScreenState}) => {
         placeholder="Password"
         secureTextEntry
       />
-      <Text>{'\n'}</Text>
       <SpaceBetween
         children={
           <CommonButton
@@ -98,9 +97,8 @@ const SignIn = ({setScreenState}) => {
       <TouchableOpacity onPress={() => setForgetModal(true)}>
         <Text style={styles.passwordStyle}>Forgot password</Text>
       </TouchableOpacity>
-      <Text>{'\n'}</Text>
-      <Text>{'\n'}</Text>
       <SpaceBetween
+      spaceBetweenStyle={{marginTop:"10%"}}
         children={
           <>
             <Text style={styles.lineStyle}></Text>
@@ -109,7 +107,6 @@ const SignIn = ({setScreenState}) => {
           </>
         }
       />
-      <Text>{'\n'}</Text>
       <View style={{flex: 1, flexDirection: 'row'}}>
         <Text style={styles.signInText}>Don't have an account ? </Text>
         <TouchableOpacity onPress={() => setScreenState('signUp')}>

@@ -21,7 +21,6 @@ import DocumentPickerComponent from '../common/DocumentPickerComponent';
 import {statesAndDistricts} from "./CountryAndState"
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-
 const {width} = Dimensions.get('window');
 
 const SignUp = ({setScreenState, token}) => {
@@ -328,7 +327,6 @@ const SignUp = ({setScreenState, token}) => {
             />
           }
         />
-        <Text>{'\n'}</Text>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Text style={styles.signInText}>Already have an account ? </Text>
           <TouchableOpacity onPress={() => setScreenState('signIn')}>

@@ -1,9 +1,10 @@
-import {Dimensions, ScrollView, StatusBar, StyleSheet, View} from 'react-native';
+import { Dimensions, ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import React from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from './AppColors';
 
-const Container = ({content}) => {
+const { width, height } = Dimensions.get('screen')
+const Container = ({ content }) => {
   return (
     <>
       <StatusBar hidden />
@@ -23,5 +24,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     backgroundColor: '#1D1D83',
+    height: height,
+    width: width
   },
 });

@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import {
   View,
   Text,
@@ -13,22 +13,22 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import AppHeader from '../../common/AppHeader';
 import SpaceBetween from '../../common/SpaceBetween';
-import {Colors} from '../../common/AppColors';
+import { Colors } from '../../common/AppColors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import CommonInput from '../../common/CommonInput';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LoaderView from '../../common/LoaderView';
 import apiService from '../../redux/apiService';
 import CommonModal from '../../common/CommonModal';
 import CommonButton from '../../common/CommonButton';
-import {useWallet} from '../../hooks/WalletProvider';
+import { useWallet } from '../../hooks/WalletProvider';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 
 const width = Dimensions.get('screen').width;
 const Dashboard = () => {
-  const {walletData} = useWallet();
+  const { walletData } = useWallet();
 
   const token = useSelector(state => state.auth.authorization);
   const userId = useSelector(state => state.auth.profileData);
@@ -111,7 +111,7 @@ const Dashboard = () => {
 
   const renderFooter = () => {
     if (!loading) return null;
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    // return <ActivityIndicator size="large" color="#0000ff" />;
   };
   useEffect(() => {
     const fetchExchangeRate = async () => {
@@ -216,15 +216,14 @@ const Dashboard = () => {
               <View>
                 <Text style={styles.balanceText}>Balance</Text>
                 <Text style={styles.amount}>
-                  {` Rs : ₹ ${
-                    walletData?.balance.toFixed(2)
+                  {` Rs : ₹ ${walletData?.balance.toFixed(2)
                       ? walletData?.balance.toFixed(2)
                       : '0'
-                  }`}
+                    }`}
                 </Text>
               </View>
               <View>
-                <Text style={{marginTop: 10}}>
+                <Text style={{ marginTop: 10 }}>
                   <Ionicons name={'wallet-outline'} size={60} color={'#fff'} />
                 </Text>
               </View>
@@ -247,7 +246,7 @@ const Dashboard = () => {
             onChangeText={e => setSearch(e)}
             placeholder={'Search coin by name'}
             rightIcon={'search'}
-            inputStyle={{paddingVertical: 5}}
+            inputStyle={{ paddingVertical: 5 }}
           />
         </KeyboardAwareScrollView>
         <SpaceBetween
@@ -272,7 +271,7 @@ const Dashboard = () => {
             se.name.toLowerCase().includes(search.toLowerCase()),
           )}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => (
+          renderItem={({ item, index }) => (
             <View
               key={index}
               style={{
@@ -280,14 +279,14 @@ const Dashboard = () => {
                   index % 2 === 0 ? Colors.container2 : Colors.card2,
               }}>
               <SpaceBetween
-                spaceBetweenStyle={{paddingVertical: 20}}
+                spaceBetweenStyle={{ paddingVertical: 20, width:"100%" }}
                 children={
                   <>
                     {/* Coin Info */}
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                       <Image
-                        source={{uri: item.image}}
-                        style={{width: 25, height: 25, marginRight: 10}}
+                        source={{ uri: item.image }}
+                        style={{ width: 25, height: 25, marginRight: 10 }}
                       />
                       <View>
                         <Text
@@ -301,13 +300,12 @@ const Dashboard = () => {
                             color: '#e37373',
                             width: '100%',
                           }}>
-                          {`24h (INR) ${
-                            item.price_change_percentage_24h_in_currency_inr
+                          {`24h (INR) ${item.price_change_percentage_24h_in_currency_inr
                               ? Number(
-                                  item.price_change_percentage_24h_in_currency_inr,
-                                ).toFixed(2)
+                                item.price_change_percentage_24h_in_currency_inr,
+                              ).toFixed(2)
                               : '0.00'
-                          }`}
+                            }`}
                         </Text>
                       </View>
                     </View>
@@ -337,7 +335,7 @@ const Dashboard = () => {
 
                     {/* Price in INR */}
                     <View>
-                      <Text style={{color: '#fff', textAlign: 'right'}}>
+                      <Text style={{ color: '#fff', textAlign: 'right' }}>
                         INR
                       </Text>
                       <Text
@@ -392,17 +390,17 @@ const Dashboard = () => {
             <>
               <View>
                 <Image
-                  source={{uri: itemStore.image}}
-                  style={{width: 25, height: 25, margin: 10}}
+                  source={{ uri: itemStore.image }}
+                  style={{ width: 25, height: 25, margin: 10 }}
                 />
-                <Text style={{color: '#fff'}}>
+                <Text style={{ color: '#fff' }}>
                   Coin Name : {itemStore.name}
                 </Text>
-                <Text style={{color: '#fff'}}>Code : {itemStore.symbol}</Text>
-                <Text style={{color: '#fff'}}>
+                <Text style={{ color: '#fff' }}>Code : {itemStore.symbol}</Text>
+                <Text style={{ color: '#fff' }}>
                   Price(INR) : ₹ {itemStore.current_price_inr.toFixed(2)}
                 </Text>
-                <Text style={{color: '#fff'}}>
+                <Text style={{ color: '#fff' }}>
                   Total Price : ₹{' '}
                   {itemStore.current_price_inr.toFixed(2) * counter.toFixed(2)}
                 </Text>
@@ -410,9 +408,9 @@ const Dashboard = () => {
               <SpaceBetween
                 children={
                   <>
-                    <CommonButton
-                      title={' + '}
-                      onPress={() => setCounter('Increase')}
+                   <CommonButton
+                      title={' - '}
+                      onPress={() => setCounter('Decrement')}
                     />
                     <CommonButton
                       title={counter > 1 ? counter : 1}
@@ -420,13 +418,22 @@ const Dashboard = () => {
                       textColor={'#ffff'}
                     />
                     <CommonButton
-                      title={' - '}
-                      onPress={() => setCounter('Decrement')}
+                      title={' + '}
+                      onPress={() => setCounter('Increase')}
                     />
                   </>
                 }
               />
-              <CommonButton title={'Buy Now'} onPress={handleBuyKnow} />
+              <CommonButton
+                title={
+                  walletData?.balance >= itemStore.current_price_inr
+                    ? 'Buy Now'
+                    : 'Insuficiant Balance'
+                }
+                onPress={walletData?.balance >= itemStore.current_price_inr ? handleBuyKnow : null}
+                disabled={!(walletData?.balance >= itemStore.current_price_inr)}
+              />
+              {/* <CommonButton title={walletData?.balance >= itemStore.current_price_inr ? 'Buy Now' :""} onPress={handleBuyKnow} /> */}
             </>
           }
         />

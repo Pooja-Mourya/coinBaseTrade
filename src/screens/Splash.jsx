@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'center', // Center align text
-    marginBottom: "40%", // Space between text and buttons
+    marginBottom: "10%", // Space between text and buttons
     paddingHorizontal: 20, // Add padding for better text layout
   },
   title: {
