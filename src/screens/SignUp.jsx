@@ -155,49 +155,7 @@ const SignUp = ({setScreenState, token}) => {
       <Text style={styles.title}>Sign Up</Text>
 
       <ScrollView style={{width: '100%', height: '100%', flex: 1}}>
-        <>
-          <DocumentPickerComponent
-            title="Upload Profile Document"
-            buttonTitle="Profile Document"
-            fileName={formData.profileImg?.name}
-            setFileName={name => setFormData({...formData, profileImg: {name}})}
-            fileUri={formData.profileImg?.uri}
-            setFileUri={uri => setFormData({...formData, profileImg: {uri}})}
-          />
-          {renderDocumentPreview('Profile Document', formData.profileImg)}
-
-          <DocumentPickerComponent
-            title="Upload Pan Document"
-            buttonTitle="Pan Document"
-            fileName={formData.panImg?.name}
-            setFileName={name => setFormData({...formData, panImg: {name}})}
-            fileUri={formData.panImg?.uri}
-            setFileUri={uri => setFormData({...formData, panImg: {uri}})}
-          />
-          {renderDocumentPreview('Pan Document', formData.panImg)}
-
-          <DocumentPickerComponent
-            title="Upload Aadhar Document"
-            buttonTitle="Aadhar Document"
-            fileName={formData.aadharImg?.name}
-            setFileName={name => setFormData({...formData, aadharImg: {name}})}
-            fileUri={formData.aadharImg?.uri}
-            setFileUri={uri => setFormData({...formData, aadharImg: {uri}})}
-          />
-          {renderDocumentPreview('Aadhar Document', formData.aadharImg)}
-
-          <DocumentPickerComponent
-            title="Upload Passbook Document"
-            buttonTitle="Passbook Document"
-            fileName={formData.passbookDoc?.name}
-            setFileName={name =>
-              setFormData({...formData, passbookDoc: {name}})
-            }
-            fileUri={formData.passbookDoc?.uri}
-            setFileUri={uri => setFormData({...formData, passbookDoc: {uri}})}
-          />
-          {renderDocumentPreview('Passbook Document', formData.passbookDoc)}
-        </>
+        
         <>
           {Object.keys(formData).map(key => {
             if (
@@ -308,7 +266,49 @@ const SignUp = ({setScreenState, token}) => {
             );
           })}
         </>
+        <>
+          <DocumentPickerComponent
+            title="Upload Profile Document"
+            buttonTitle="Profile Document"
+            fileName={formData.profileImg?.name}
+            setFileName={name => setFormData({...formData, profileImg: {name}})}
+            fileUri={formData.profileImg?.uri}
+            setFileUri={uri => setFormData({...formData, profileImg: {uri}})}
+          />
+          {renderDocumentPreview('Profile Document', formData.profileImg)}
 
+          <DocumentPickerComponent
+            title="Upload Pan Document"
+            buttonTitle="Pan Document"
+            fileName={formData.panImg?.name}
+            setFileName={name => setFormData({...formData, panImg: {name}})}
+            fileUri={formData.panImg?.uri}
+            setFileUri={uri => setFormData({...formData, panImg: {uri}})}
+          />
+          {renderDocumentPreview('Pan Document', formData.panImg)}
+
+          <DocumentPickerComponent
+            title="Upload Aadhar Document"
+            buttonTitle="Aadhar Document"
+            fileName={formData.aadharImg?.name}
+            setFileName={name => setFormData({...formData, aadharImg: {name}})}
+            fileUri={formData.aadharImg?.uri}
+            setFileUri={uri => setFormData({...formData, aadharImg: {uri}})}
+          />
+          {renderDocumentPreview('Aadhar Document', formData.aadharImg)}
+
+          <DocumentPickerComponent
+            title="Upload Passbook Document"
+            buttonTitle="Passbook Document"
+            fileName={formData.passbookDoc?.name}
+            setFileName={name =>
+              setFormData({...formData, passbookDoc: {name}})
+            }
+            fileUri={formData.passbookDoc?.uri}
+            setFileUri={uri => setFormData({...formData, passbookDoc: {uri}})}
+          />
+          {renderDocumentPreview('Passbook Document', formData.passbookDoc)}
+        </>
         <SpaceBetween
           children={
             <CommonButton

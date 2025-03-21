@@ -15,11 +15,14 @@ import apiService from '../redux/apiService';
 import {NotificationCount} from '../redux/AuthSlice';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
+import ScreenHeader from '../common/ScreenHeader';
+import {useNavigation} from '@react-navigation/native';
 
 const Notification = () => {
   const token = useSelector(state => state.auth.userData);
   const profileData = useSelector(state => state.auth.profileData);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [notificationData, setNotificationData] = useState();
   const fetchNotification = async () => {
     try {
@@ -118,21 +121,28 @@ const Notification = () => {
     );
   };
   return (
-    <LinearGradient colors={['#141E30', '#243B55']} style={styles.container}>
-      <AppHeader username={'Notification'} />
-      {notificationData && notificationData.length > 0 ? (
-        <FlatList
-          data={notificationData}
-          renderItem={renderItem}
-          keyExtractor={item => item._id}
-          showsVerticalScrollIndicator={false}
-        />
-      ) : (
-        <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>No Notifications Available</Text>
-        </View>
-      )}
-    </LinearGradient>
+    <Container
+      content={
+        <>
+          <ScreenHeader
+            screenHeader="Notification"
+            onPress={() => navigation.goBack()}
+          />
+          {notificationData && notificationData.length > 0 ? (
+            <FlatList
+              data={notificationData}
+              renderItem={renderItem}
+              keyExtractor={item => item._id}
+              showsVerticalScrollIndicator={false}
+            />
+          ) : (
+            <View style={styles.noDataContainer}>
+              <Text style={styles.noDataText}>No Notifications Available</Text>
+            </View>
+          )}
+        </>
+      }
+    />
   );
 };
 

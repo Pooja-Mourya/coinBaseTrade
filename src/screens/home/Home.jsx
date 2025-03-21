@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import {
   View,
   Text,
@@ -13,22 +13,24 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import AppHeader from '../../common/AppHeader';
 import SpaceBetween from '../../common/SpaceBetween';
-import { Colors } from '../../common/AppColors';
+import {Colors} from '../../common/AppColors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import CommonInput from '../../common/CommonInput';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import LoaderView from '../../common/LoaderView';
 import apiService from '../../redux/apiService';
 import CommonModal from '../../common/CommonModal';
 import CommonButton from '../../common/CommonButton';
-import { useWallet } from '../../hooks/WalletProvider';
+import {useWallet} from '../../hooks/WalletProvider';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import {useNavigation} from '@react-navigation/native';
 
 const width = Dimensions.get('screen').width;
 const Dashboard = () => {
-  const { walletData } = useWallet();
+  const {walletData} = useWallet();
+  const navigation = useNavigation();
 
   const token = useSelector(state => state.auth.authorization);
   const userId = useSelector(state => state.auth.profileData);
@@ -216,14 +218,15 @@ const Dashboard = () => {
               <View>
                 <Text style={styles.balanceText}>Balance</Text>
                 <Text style={styles.amount}>
-                  {` Rs : ₹ ${walletData?.balance.toFixed(2)
+                  {` Rs : ₹ ${
+                    walletData?.balance.toFixed(2)
                       ? walletData?.balance.toFixed(2)
                       : '0'
-                    }`}
+                  }`}
                 </Text>
               </View>
               <View>
-                <Text style={{ marginTop: 10 }}>
+                <Text style={{marginTop: 10}}>
                   <Ionicons name={'wallet-outline'} size={60} color={'#fff'} />
                 </Text>
               </View>
@@ -246,7 +249,7 @@ const Dashboard = () => {
             onChangeText={e => setSearch(e)}
             placeholder={'Search coin by name'}
             rightIcon={'search'}
-            inputStyle={{ paddingVertical: 5 }}
+            inputStyle={{paddingVertical: 5}}
           />
         </KeyboardAwareScrollView>
         <SpaceBetween
@@ -262,7 +265,33 @@ const Dashboard = () => {
               <View>
                 <Text style={styles.textStyle}>Market Statistics</Text>
               </View>
-              <View></View>
+              <TouchableOpacity onPress={() => navigation.navigate('Finance')}>
+                <Text
+                  style={{
+                    color: '#fff',
+                    backgroundColor: 'orange',
+                    paddingHorizontal: 15,
+                    borderRadius: 10,
+                    paddingVertical: 5,
+                    textAlign: 'center',
+                  }}>
+                  Add Fund
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Notification')}>
+                <Text
+                  style={{
+                    color: '#fff',
+                    backgroundColor: 'teal',
+                    paddingHorizontal: 15,
+                    borderRadius: 10,
+                    paddingVertical: 5,
+                    textAlign: 'center',
+                  }}>
+                  Notification
+                </Text>
+              </TouchableOpacity>
             </>
           }
         />
@@ -271,22 +300,23 @@ const Dashboard = () => {
             se.name.toLowerCase().includes(search.toLowerCase()),
           )}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
+          renderItem={({item, index}) => (
             <View
               key={index}
               style={{
+                width:width * 0.5,
                 backgroundColor:
                   index % 2 === 0 ? Colors.container2 : Colors.card2,
               }}>
               <SpaceBetween
-                spaceBetweenStyle={{ paddingVertical: 20, width:"100%" }}
+                spaceBetweenStyle={{paddingVertical: 20, width: '100%'}}
                 children={
                   <>
                     {/* Coin Info */}
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Image
-                        source={{ uri: item.image }}
-                        style={{ width: 25, height: 25, marginRight: 10 }}
+                        source={{uri: item.image}}
+                        style={{width: 25, height: 25, marginRight: 10}}
                       />
                       <View>
                         <Text
@@ -300,12 +330,13 @@ const Dashboard = () => {
                             color: '#e37373',
                             width: '100%',
                           }}>
-                          {`24h (INR) ${item.price_change_percentage_24h_in_currency_inr
+                          {`24h (INR) ${
+                            item.price_change_percentage_24h_in_currency_inr
                               ? Number(
-                                item.price_change_percentage_24h_in_currency_inr,
-                              ).toFixed(2)
+                                  item.price_change_percentage_24h_in_currency_inr,
+                                ).toFixed(2)
                               : '0.00'
-                            }`}
+                          }`}
                         </Text>
                       </View>
                     </View>
@@ -335,7 +366,7 @@ const Dashboard = () => {
 
                     {/* Price in INR */}
                     <View>
-                      <Text style={{ color: '#fff', textAlign: 'right' }}>
+                      <Text style={{color: '#fff', textAlign: 'right'}}>
                         INR
                       </Text>
                       <Text
@@ -390,25 +421,25 @@ const Dashboard = () => {
             <>
               <View>
                 <Image
-                  source={{ uri: itemStore.image }}
-                  style={{ width: 25, height: 25, margin: 10 }}
+                  source={{uri: itemStore.image}}
+                  style={{width: 25, height: 25, margin: 10}}
                 />
-                <Text style={{ color: '#fff' }}>
+                <Text style={{color: '#fff'}}>
                   Coin Name : {itemStore.name}
                 </Text>
-                <Text style={{ color: '#fff' }}>Code : {itemStore.symbol}</Text>
-                <Text style={{ color: '#fff' }}>
+                <Text style={{color: '#fff'}}>Code : {itemStore.symbol}</Text>
+                <Text style={{color: '#fff'}}>
                   Price(INR) : ₹ {itemStore.current_price_inr.toFixed(2)}
                 </Text>
-                <Text style={{ color: '#fff' }}>
+                <Text style={{color: '#fff'}}>
                   Total Price : ₹{' '}
-                  {itemStore.current_price_inr.toFixed(2) * counter.toFixed(2)}
+                  {itemStore.current_price_inr && itemStore.current_price_inr.toFixed(2) * counter.toFixed(2)}
                 </Text>
               </View>
               <SpaceBetween
                 children={
                   <>
-                   <CommonButton
+                    <CommonButton
                       title={' - '}
                       onPress={() => setCounter('Decrement')}
                     />
@@ -430,7 +461,11 @@ const Dashboard = () => {
                     ? 'Buy Now'
                     : 'Insuficiant Balance'
                 }
-                onPress={walletData?.balance >= itemStore.current_price_inr ? handleBuyKnow : null}
+                onPress={
+                  walletData?.balance >= itemStore.current_price_inr
+                    ? handleBuyKnow
+                    : null
+                }
                 disabled={!(walletData?.balance >= itemStore.current_price_inr)}
               />
               {/* <CommonButton title={walletData?.balance >= itemStore.current_price_inr ? 'Buy Now' :""} onPress={handleBuyKnow} /> */}
@@ -438,18 +473,12 @@ const Dashboard = () => {
           }
         />
       )}
-
     </LinearGradient>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  hamburgerMenu: {
-    fontSize: 24,
-    color: 'white',
   },
   balanceContainer: {
     backgroundColor: '#2B3A67',
@@ -473,94 +502,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
   },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-    paddingHorizontal: 16,
-  },
-  depositButton: {
-    backgroundColor: '#FBC02D',
-    padding: 15,
-    borderRadius: 10,
-    width: '48%',
-    alignItems: 'center',
-  },
-  withdrawButton: {
-    backgroundColor: '#FBC02D',
-    padding: 15,
-    borderRadius: 10,
-    width: '48%',
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 16,
-    color: '#1A202C',
-    fontWeight: 'bold',
-  },
-  trendingStockContainer: {
-    marginBottom: 20,
-    paddingHorizontal: 16,
-  },
-  sectionTitle: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  stockList: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  stockItem: {
-    backgroundColor: '#2B3A67',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    width: '30%',
-  },
-  stockSymbol: {
-    color: '#A0AEC0',
-    fontSize: 14,
-    marginBottom: 5,
-  },
-  stockPrice: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  marketStatsContainer: {
-    marginBottom: 20,
-    paddingHorizontal: 16,
-  },
-  marketItem: {
-    backgroundColor: '#2B3A67',
-    padding: 20,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  marketPrice: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  marketChange: {
-    color: '#00C853',
-    fontSize: 14,
-  },
-  textStyle: {
-    color: '#fff',
-    fontSize: 18,
-  },
-  textBorderStyle: {
-    color: '#fff',
-    fontSize: 18,
-    borderColor: '#fff',
-    borderWidth: 1,
-    paddingHorizontal: 20,
-    borderRadius: 25,
-    paddingVertical: 2,
-  },
+  textStyle:{
+    color:'#fff',
+    fontSize:16
+  }
 });
 
 export default Dashboard;

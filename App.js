@@ -44,6 +44,8 @@ import NetInfo from '@react-native-community/netinfo';
 import { NotificationCount } from './src/redux/AuthSlice';
 import apiService from './src/redux/apiService';
 import SignUp from './src/screens/SignUp';
+import Deposit from './src/screens/Finance/Deposit';
+import AboutUs from './src/screens/aboutus/AboutUs';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,10 +64,10 @@ function MyTabs() {
         headerShown: false,
       })}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Trending" component={Trending} />
+      <Tab.Screen name="Portfolio" component={Trending} />
       <Tab.Screen name="Option" component={TopUp} />
       <Tab.Screen name="Finance" component={Graph} />
-      <Tab.Screen name="Notification" component={Notification} />
+      {/* <Tab.Screen name="Notification" component={Notification} /> */}
     </Tab.Navigator>
   );
 }
@@ -84,7 +86,7 @@ function DrawerNavigation() {
       {/* <Drawer.Screen name="Blog" component={UserProfile} />
       <Drawer.Screen name="Community" component={UserProfile} /> */}
       <Drawer.Screen name="Convert" component={Convert} />
-      <Drawer.Screen name="SignUp" component={SignUp} />
+      <Drawer.Screen name="About Us " component={AboutUs} />
     </Drawer.Navigator>
   );
 }
@@ -131,6 +133,11 @@ function StackNavigation({ token }) {
       <Stack.Screen
         name="SignIn"
         component={SignIn}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
         options={{ headerShown: false }}
       />
       {/* <Stack.Screen
@@ -204,6 +211,11 @@ function StackNavigation({ token }) {
       <Stack.Screen
         name="Funds"
         component={Funds}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Deposit"
+        component={Deposit}
         options={{ headerShown: false }}
       />
       <Stack.Screen

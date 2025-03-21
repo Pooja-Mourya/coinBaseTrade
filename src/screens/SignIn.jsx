@@ -20,10 +20,10 @@ import { AllData, IsAdmin, UserData } from '../redux/AuthSlice';
 const SignIn = ({setScreenState}) => {
   const navigation = useNavigation();
   const [inputField, setInputField] = useState({
-    email: 'dprajapati15302@gmail.com',
-    password: '123456',
-    // email: '',
-    // password: '',
+    // email: 'dprajapati15302@gmail.com',
+    // password: '123456',
+    email: '',
+    password: '',
   });
   const [loading, setLoading] = useState(false);
   const [forgetModal, setForgetModal] = useState(false);

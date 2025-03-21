@@ -8,7 +8,7 @@ import apiService from '../../redux/apiService';
 const Deposit = () => {
   const navigation = useNavigation();
   const token = useSelector(state => state.auth.userData);
-  const [bankDetail, setBankDetail] = useState({});
+  // const [bankDetail, setBankDetail] = useState({});
   const [upiDetail, setUpiDetail] = useState({});
 
   const getUpiAnBankDetail = async () => {
@@ -22,7 +22,7 @@ const Deposit = () => {
         method: 'GET',
         headers: {Authorization: token},
       });
-      setBankDetail(res.data?.bankDetails);
+      // setBankDetail(res.data?.bankDetails);
       setUpiDetail(res.data?.upiDetails);
       // console.log('bank detail res :', res.data?.bankDetails);
       // console.log('upi detail res :', res.data?.upiDetails);
@@ -51,11 +51,11 @@ const Deposit = () => {
         iconName={'crop-free'}
         onPress={() => navigation.navigate('QRPay')}
       />
-      <CommonButton
+      {/* <CommonButton
         title={'Using Bank Detail'}
         iconName={'currency-rupee'}
         onPress={() => navigation.navigate('BankPay', {bankDetail})}
-      />
+      /> */}
     </View>
   );
 };

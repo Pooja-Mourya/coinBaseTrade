@@ -39,24 +39,24 @@ const CustomTabNavigation = ({navigation}) => {
       <TouchableOpacity
         style={[
           styles.tab,
-          activeTab === 'Trending' ? styles.activeTabBorder : null,
+          activeTab === 'Portfolio' ? styles.activeTabBorder : null,
         ]}
         onPress={() => {
-          setActiveTab('Trending');
-          navigation.navigate('Trending');
+          setActiveTab('Portfolio');
+          navigation.navigate('Portfolio');
         }}>
         <MaterialCommunityIcons
           name="fire"
           size={24}
-          color={activeTab === 'Trending' ? '#FFD700' : '#A0AEC0'}
+          color={activeTab === 'Portfolio' ? '#FFD700' : '#A0AEC0'}
           style={{marginTop: 10}}
         />
         <Text
           style={[
             styles.tabText,
-            activeTab === 'Trending' && styles.activeTabText,
+            activeTab === 'Portfolio' && styles.activeTabText,
           ]}>
-          Trending
+          Portfolio
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -105,7 +105,7 @@ const CustomTabNavigation = ({navigation}) => {
           Finance
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={[
           styles.tab,
           activeTab === 'Notification' ? styles.activeTabBorder : null,
@@ -142,32 +142,8 @@ const CustomTabNavigation = ({navigation}) => {
           ]}>
           Notification
         </Text>
-      </TouchableOpacity>
-      {roleWise === 1 && (
-        <TouchableOpacity
-          style={[
-            styles.tab,
-            activeTab === 'User' ? styles.activeTabBorder : null,
-          ]}
-          onPress={() => {
-            setActiveTab('User');
-            navigation.navigate('User');
-          }}>
-          <MaterialIcons
-            name="person"
-            size={24}
-            color={activeTab === 'User' ? '#FFD700' : '#A0AEC0'}
-            style={{marginTop: 10}}
-          />
-          <Text
-            style={[
-              styles.tabText,
-              activeTab === 'User' && styles.activeTabText,
-            ]}>
-            User
-          </Text>
-        </TouchableOpacity>
-      )}
+      </TouchableOpacity> */}
+     
     </View>
   );
 };
