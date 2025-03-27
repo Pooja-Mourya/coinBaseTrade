@@ -51,6 +51,13 @@ const Splash = () => {
                   }}
                 />
               </SpaceBetween>
+              <View style={{marginTop:10}}>
+                <Text style={[styles.title, {textAlign:'center'}]}>F.I.U</Text>
+              <Text style={[styles.subtitle, {color:Colors.button, textAlign:'center'}]}>
+               REGISTERED
+              </Text>
+              </View>
+              
             </>
           )}
 
@@ -77,7 +84,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     alignItems: 'center', // Center align text
-    marginBottom: "10%", // Space between text and buttons
+    marginBottom: '10%', // Space between text and buttons
     paddingHorizontal: 20, // Add padding for better text layout
   },
   title: {

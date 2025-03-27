@@ -183,7 +183,7 @@ function StackNavigation({ token }) {
       />
       {/* trending */}
       <Stack.Screen
-        name="Portfolio"
+        name="AppPortfolio"
         component={Portfolio}
         options={{ headerShown: false }}
       />

@@ -304,25 +304,23 @@ const Dashboard = () => {
             <View
               key={index}
               style={{
-                width:width * 0.5,
                 backgroundColor:
                   index % 2 === 0 ? Colors.container2 : Colors.card2,
               }}>
               <SpaceBetween
-                spaceBetweenStyle={{paddingVertical: 20, width: '100%'}}
+                spaceBetweenStyle={{paddingVertical: 20}}
                 children={
                   <>
                     {/* Coin Info */}
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', maxWidth:'39%'}}>
                       <Image
                         source={{uri: item.image}}
                         style={{width: 25, height: 25, marginRight: 10}}
                       />
-                      <View>
+                      <View style={{width:"90%"}}>
                         <Text
                           style={{
                             color: '#fff',
-                            width: '100%',
                           }}>{`${item.name} (${item.symbol})`}</Text>
 
                         <Text
@@ -342,12 +340,11 @@ const Dashboard = () => {
                     </View>
 
                     {/* Price in USD */}
-                    <View>
+                    <View style={{maxWidth:'20%'}}>
                       <Text
                         style={{
                           color: '#fff',
                           textAlign: 'center',
-                          width: '100%',
                         }}>
                         USD
                       </Text>
@@ -355,7 +352,6 @@ const Dashboard = () => {
                         style={{
                           color: 'orange',
                           textAlign: 'center',
-                          width: '100%',
                         }}>
                         ${' '}
                         {item.current_price
@@ -365,7 +361,7 @@ const Dashboard = () => {
                     </View>
 
                     {/* Price in INR */}
-                    <View>
+                    <View style={{maxWidth:'20%'}}>
                       <Text style={{color: '#fff', textAlign: 'right'}}>
                         INR
                       </Text>
@@ -383,6 +379,7 @@ const Dashboard = () => {
 
                     {/* Buy Button */}
                     <TouchableOpacity
+                    style={{maxWidth:'20%'}}
                       onPress={() => {
                         setItemStore(item);
                         setBuyCoin(true);
